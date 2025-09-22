@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Combine
+import UserNotifications
+
 
 // MARK: - Color Palette
 // All colors used in the app, declared as static properties for reusability.
@@ -49,6 +51,7 @@ class TaskManager: ObservableObject {
     init() {
         loadTasks()
         startTimer()
+        requestNotificationPermission()
     }
 
     // Filter tasks for today's view, sorted by status (running first), then by creation date.
@@ -94,6 +97,27 @@ class TaskManager: ObservableObject {
     func stopTask(for task: Task) {
         guard let index = tasks.firstIndex(where: { $0.id == task.id }) else { return }
         tasks[index].status = .completed
+        
+        // send notifications to users device
+        if tasks[index].isTimed && tasks[index].elapsed >= tasks[index].duration {
+                // Create the notification content
+                let content = UNMutableNotificationContent()
+                content.title = "Task Finished! 🎉"
+                content.body = "The task '\(tasks[index].name)' is complete."
+                content.sound = .default
+
+                // Schedule the notification to fire immediately
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+                // Add the request to the notification center
+                UNUserNotificationCenter.current().add(request) { error in
+                    if let error = error {
+                        print("Error scheduling notification: \(error.localizedDescription)")
+                    }
+                }
+            }
+        
         saveTasks()
     }
 
