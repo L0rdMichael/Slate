@@ -24,6 +24,7 @@ struct SlateApp: App {
         // This creates the icon in the menu bar.
         MenuBarExtra {
             ContentView(taskManager: taskManager)
+//                .preferredColorScheme(.light)
         } label: {
             // The icon that appears in the menu bar.
             Image(systemName: "checklist")

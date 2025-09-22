@@ -1,30 +1,24 @@
 //
-//  ContentView.swift
-//  Slate
+//  ContentView.swift
+//  Slate
 //
-//  Created by MICHAEL on 22/09/2025.
+//  Created by MICHAEL on 22/09/2025.
 //
-
-//import SwiftUI
-//
-//struct ContentView: View {
-//    var body: some View {
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-//            Text("Hello, world!")
-//        }
-//        .padding()
-//    }
-//}
-//
-//#Preview {
-//    ContentView()
-//}
 
 import SwiftUI
 import Combine
+
+// MARK: - Color Palette
+// All colors used in the app, declared as static properties for reusability.
+extension Color {
+    static let accentColor = Color.accentColor
+    static let progressRunning = Color.accentColor
+    static let progressPaused = Color.orange
+    static let progressCompleted = Color.green
+    static let subtitleColor = Color.secondary
+    static let strikethroughColor = Color.secondary
+    static let newTaskBackground = Color(.unemphasizedSelectedContentBackgroundColor)
+}
 
 // MARK: - Model
 // Represents a single task, conforming to Codable to be easily saved and loaded.
@@ -57,10 +51,23 @@ class TaskManager: ObservableObject {
         startTimer()
     }
 
-    // Filter tasks for today's view
+    // Filter tasks for today's view, sorted by status (running first), then by creation date.
     var todayTasks: [Task] {
         tasks.filter { Calendar.current.isDateInToday($0.creationDate) }
-             .sorted(by: { $0.creationDate > $1.creationDate })
+            .sorted { (task1, task2) -> Bool in
+                // Running tasks always come first
+                if task1.status == .running && task2.status != .running {
+                    return true
+                }
+                if(task1.status == .paused && task2.status != .running ){
+                    return true
+                }
+                if task1.status != .running && task2.status == .running {
+                    return false
+                }
+                // For tasks of the same status, sort by creation date (newest first)
+                return task1.creationDate > task2.creationDate
+            }
     }
     
     // Group all tasks by date for the history view
@@ -213,11 +220,10 @@ struct TodayView: View {
             if taskManager.todayTasks.isEmpty {
                 Spacer()
                 Text("A fresh slate for today.")
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.subtitleColor)
                 Text("Add a task to begin.")
                     .font(.caption)
-//                    .foregroundColor(.tertiary)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.subtitleColor)
                 Spacer()
             } else {
                 List {
@@ -230,6 +236,8 @@ struct TodayView: View {
             
             FooterView(tasks: taskManager.todayTasks)
         }
+//        .background(Color.white)
+
      }
 }
 
@@ -252,9 +260,10 @@ struct NewTaskView: View {
 
             Divider().padding(.vertical, 4)
 
-            Text(isDragging ? formatTime(dragTime) : "Drag down to set a timer, or press Enter")
+
+            Text(taskName.count < 3 ? "Kindly enter a task name" : (isDragging ? formatTime(dragTime) : "Drag down to set a timer, or press Enter"))
                 .font(.caption)
-                .foregroundColor(isDragging ? .accentColor : .secondary)
+                .foregroundColor(isDragging ? .accentColor : .subtitleColor)
                 .frame(maxWidth: .infinity)
                 .padding(8)
                 .contentShape(Rectangle()) // Make the whole area draggable
@@ -278,7 +287,7 @@ struct NewTaskView: View {
                 )
         }
         .padding(12)
-        .background(Color(.unemphasizedSelectedContentBackgroundColor))
+        .background(Color.newTaskBackground)
         .cornerRadius(10)
     }
 }
@@ -296,9 +305,9 @@ struct TaskItemView: View {
     
     private var progressColor: Color {
         switch task.status {
-        case .running: return .accentColor
-        case .paused: return .orange
-        case .completed: return .green
+        case .running: return .progressRunning
+        case .paused: return .progressPaused
+        case .completed: return .progressCompleted
         }
     }
 
@@ -306,8 +315,8 @@ struct TaskItemView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(task.name)
-                    .strikethrough(task.status == .completed, color: .secondary)
-                    .foregroundColor(task.status == .completed ? .secondary : .primary)
+                    .strikethrough(task.status == .completed, color: .strikethroughColor)
+                    .foregroundColor(task.status == .completed ? .subtitleColor : .primary)
                 
                 Spacer()
                 
@@ -332,7 +341,7 @@ struct TaskItemView: View {
             
             Text("\(formatTimeDigital(task.elapsed))" + (task.isTimed ? " / \(formatTimeDigital(task.duration))" : ""))
                 .font(.caption.monospaced())
-                .foregroundColor(.secondary)
+                .foregroundColor(.subtitleColor)
 
             ProgressView(value: progress)
                 .progressViewStyle(LinearProgressViewStyle(tint: progressColor))
@@ -357,11 +366,10 @@ struct HistoryView: View {
                         HStack {
                             Text(task.name)
                             Spacer()
-//                                                        Text(task.creationDate)
                             Spacer()
                             Text(formatTime(task.elapsed))
                                 .font(.caption.monospaced())
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.subtitleColor)
                         }
                     }
                 }
@@ -386,7 +394,7 @@ struct FooterView: View {
         HStack {
             Text("\(runningCount) running / \(completedCount) completed")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(.subtitleColor)
         }
         .padding(8)
     }
