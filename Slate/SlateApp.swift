@@ -7,11 +7,27 @@
 
 import SwiftUI
 
+//@main
+//struct SlateApp: App {
+//    var body: some Scene {
+//        WindowGroup {
+//            ContentView()
+//        }
+//    }
+//}
+
 @main
 struct SlateApp: App {
+    @StateObject private var taskManager = TaskManager()
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        // This creates the icon in the menu bar.
+        MenuBarExtra {
+            ContentView(taskManager: taskManager)
+        } label: {
+            // The icon that appears in the menu bar.
+            Image(systemName: "checklist")
         }
+        .menuBarExtraStyle(.window) // Use a popover-style window
     }
 }
