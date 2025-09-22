@@ -1,0 +1,13 @@
+# Build artifacts
+build/
+DerivedData/
+
+# User-specific Xcode data
+xcuserdata/
+
+# macOS metadata
+.DS_Store
+
+# Xcode preview files
+*.canvas
+
