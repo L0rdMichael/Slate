@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		047AC9172E818EC400248493 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 047AC9162E818EB500248493 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		047AC8F42E81217D00248493 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		047AC8E52E81217B00248493 /* Slate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		047AC8F32E81217D00248493 /* SlateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		047AC8FD2E81217D00248493 /* SlateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		047AC9162E818EB500248493 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -79,6 +84,7 @@
 				047AC8F62E81217D00248493 /* SlateTests */,
 				047AC9002E81217D00248493 /* SlateUITests */,
 				047AC8E62E81217B00248493 /* Products */,
+				047AC9162E818EB500248493 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				047AC9172E818EC400248493 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
