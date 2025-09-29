@@ -19,19 +19,43 @@ import SwiftUI
 @main
 struct SlateApp: App {
     @StateObject private var taskManager = TaskManager()
-    
+    @State private var isMenuBarExtraVisible: Bool = true // State to control visibility
 
+    private var menuBarTitle: String {
+        if let topTask = taskManager.todayTasks.first {
+            let timeInfo: String
+            if topTask.isTimed {
+                let remaining = max(0, topTask.duration - topTask.elapsed)
+                timeInfo = formatTimeCompact(remaining) // Use compact format without trailing zeros
+            } else {
+                timeInfo = formatTimeCompact(topTask.elapsed) // Use compact format without trailing zeros
+            }
+            return timeInfo
+        }
+        return "Slate"
+    }
 
     var body: some Scene {
-        // This creates the icon in the menu bar.
-        MenuBarExtra {
+        MenuBarExtra(isInserted: $isMenuBarExtraVisible) { 
             ContentView(taskManager: taskManager)
-//                .preferredColorScheme(.light)
         } label: {
-            // The icon that appears in the menu bar.
-            Image(systemName: "checklist")
+            HStack {
+                Image(systemName: "checklist")
+                Text(menuBarTitle)
+                    .font(.system(size: 14, weight: .bold))
+             
+            }
         }
-        .menuBarExtraStyle(.window) // Use a popover-style window
-      
+        .menuBarExtraStyle(.window)
+    }
+}
+
+func formatTimeCompact(_ totalSeconds: TimeInterval) -> String {
+    let hours = Int(totalSeconds) / 3600
+    let minutes = (Int(totalSeconds) % 3600) / 60
+    if hours > 0 {
+        return "\(hours)hr \(minutes)m"
+    } else {
+        return "\(minutes)m"
     }
 }
