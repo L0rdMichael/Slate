@@ -214,41 +214,46 @@ struct HeaderView: View {
 // View for today's tasks
 struct TodayView: View {
   @ObservedObject var taskManager: TaskManager
+  @Namespace private var scrollSpace
 
   var body: some View {
-    VStack(spacing: 0) {
-      NewTaskView(taskManager: taskManager)
-        .padding()
+    ScrollViewReader { proxy in
+      VStack(spacing: 0) {
+        NewTaskView(taskManager: taskManager)
+          .padding()
+        // VStack(spacing: 0) {
+        //   NewTaskView(taskManager: taskManager)
+        //     .padding()
 
-      Divider()
-
-      if taskManager.todayTasks.isEmpty {
-        Spacer()
-        Text("A fresh slate for today.")
-          .font(.system(size: 17, weight: .regular, design: .default))
-          .font(Font.custom("Helvetica", size: 17))
-          .foregroundColor(.subtitleColor)
-        Text("Add a task to begin.")
-          .font(.system(size: 14, weight: .regular, design: .default))
-          .font(Font.custom("Helvetica", size: 14))
-          .foregroundColor(.subtitleColor)
-        Spacer()
-      } else {
-        List {
-          ForEach(taskManager.todayTasks) { task in
-            TaskItemView(task: task, taskManager: taskManager)
-              .font(Font.custom("Helvetica", size: 17))
-
+        Divider()
+        if taskManager.todayTasks.isEmpty {
+          Spacer()
+          Text("A fresh slate for today.")
+            .foregroundColor(.subtitleColor)
+          Text("Add a task to begin.")
+            .font(.caption)
+            .foregroundColor(.subtitleColor)
+          Spacer()
+        } else {
+          List {
+            ForEach(taskManager.todayTasks) { task in
+              TaskItemView(task: task, taskManager: taskManager)
+                .id(task.id)  // Assign ID for scrolling
+            }
+          }
+          .listStyle(.plain)
+          .onChange(of: taskManager.todayTasks.count) { _ in
+            if let firstTask = taskManager.todayTasks.first {
+              withAnimation {
+                proxy.scrollTo(firstTask.id, anchor: .top)  // Scroll to top
+              }
+            }
           }
         }
-        .listStyle(.plain)
+
+        FooterView(tasks: taskManager.todayTasks)
       }
-
-      FooterView(tasks: taskManager.todayTasks)
-        .font(Font.custom("Helvetica", size: 14))
-
     }
-    //        .background(Color.white)
 
   }
 }
