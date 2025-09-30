@@ -121,6 +121,15 @@ class TaskManager: ObservableObject {
     saveTasks()
   }
 
+  func deleteTasks(for taskID: UUID) {
+    tasks.removeAll { $0.id == taskID }
+    
+    //   { task in
+    //   taskIDs.contains(task.id)
+    // }
+    saveTasks()
+  }
+
   private func startTimer() {
     // This timer fires every second to update the elapsed time for running tasks.
     timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { [weak self] _ in
@@ -342,13 +351,13 @@ struct NewTaskView: View {
         // Knob at pointer
         Circle()
           .fill(Color.white)
-          .frame(width: 32, height: 32)
+          .frame(width: 16, height: 16)
           .shadow(color: .white.opacity(0.8), radius: 12)
           .position(end)
         // Optional: subtle glow at anchor
         Circle()
           .fill(Color.white.opacity(0.5))
-          .frame(width: 18, height: 18)
+          .frame(width: 9, height: 9)
           .position(start)
       }
       .zIndex(9999)
@@ -400,8 +409,17 @@ struct TaskItemView: View {
               Image(systemName: "stop.fill")
             }
             .buttonStyle(.plain)
+
           }
         }
+        // button to del task
+        Button {
+            taskManager.deleteTasks(for: task.id)
+        } label: {
+          Image(systemName: "trash.fill")
+        }
+        .buttonStyle(.plain)
+
       }
 
       Text(

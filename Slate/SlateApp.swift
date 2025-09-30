@@ -23,6 +23,9 @@ struct SlateApp: App {
 
     private var menuBarTitle: String {
         if let topTask = taskManager.todayTasks.first {
+            if topTask.status != .running {
+                return ""
+            }
             let timeInfo: String
             if topTask.isTimed {
                 let remaining = max(0, topTask.duration - topTask.elapsed)
