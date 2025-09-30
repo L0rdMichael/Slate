@@ -26,13 +26,13 @@ struct SlateApp: App {
             let timeInfo: String
             if topTask.isTimed {
                 let remaining = max(0, topTask.duration - topTask.elapsed)
-                timeInfo = formatTimeCompact(remaining) // Use compact format without trailing zeros
+                timeInfo = formatTimeCompact(remaining) 
             } else {
-                timeInfo = formatTimeCompact(topTask.elapsed) // Use compact format without trailing zeros
+                timeInfo = formatTimeCompact(topTask.elapsed) 
             }
             return timeInfo
         }
-        return "Slate"
+        return ""
     }
 
     var body: some Scene {

@@ -160,24 +160,7 @@ class TaskManager: ObservableObject {
     }
 }
 
-// MARK: - Main App Entry Point
-//@main
-//struct SlateApp: App {
-//    @StateObject private var taskManager = TaskManager()
-//
-//    var body: some Scene {
-//        // This creates the icon in the menu bar.
-//        MenuBarExtra {
-//            ContentView(taskManager: taskManager)
-//        } label: {
-//            // The icon that appears in the menu bar.
-//            Image(systemName: "checklist")
-//        }
-//        .menuBarExtraStyle(.window) // Use a popover-style window
-//    }
-//}
 
-// MARK: - Views
 
 // Main view inside the popover
 struct ContentView: View {
