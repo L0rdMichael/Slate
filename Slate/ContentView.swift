@@ -225,21 +225,28 @@ struct TodayView: View {
       if taskManager.todayTasks.isEmpty {
         Spacer()
         Text("A fresh slate for today.")
+          .font(.system(size: 17, weight: .regular, design: .default))
+          .font(Font.custom("Helvetica", size: 17))
           .foregroundColor(.subtitleColor)
         Text("Add a task to begin.")
-          .font(.caption)
+          .font(.system(size: 14, weight: .regular, design: .default))
+          .font(Font.custom("Helvetica", size: 14))
           .foregroundColor(.subtitleColor)
         Spacer()
       } else {
         List {
           ForEach(taskManager.todayTasks) { task in
             TaskItemView(task: task, taskManager: taskManager)
+              .font(Font.custom("Helvetica", size: 17))
+
           }
         }
         .listStyle(.plain)
       }
 
       FooterView(tasks: taskManager.todayTasks)
+        .font(Font.custom("Helvetica", size: 14))
+
     }
     //        .background(Color.white)
 
