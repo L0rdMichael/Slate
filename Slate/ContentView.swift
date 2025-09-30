@@ -123,7 +123,7 @@ class TaskManager: ObservableObject {
 
   func deleteTasks(for taskID: UUID) {
     tasks.removeAll { $0.id == taskID }
-    
+
     //   { task in
     //   taskIDs.contains(task.id)
     // }
@@ -282,6 +282,7 @@ struct NewTaskView: View {
           .textFieldStyle(.plain)
           .font(.title3)
           .onSubmit {
+//            if taskName.isEmpty || taskName.count < 3 || isDragging { return }
             taskManager.addTask(name: taskName, duration: 0)
             taskName = ""
           }
@@ -292,9 +293,10 @@ struct NewTaskView: View {
             Text(
               taskName.count < 3
                 ? "Kindly enter a task name"
-                : (isDragging ? formatTime(dragTime) : "Drag down to set a timer, or press Enter")
+                : (isDragging
+                  ? formatTime(dragTime) : "Drag down to set time, or press Enter")
             )
-            .font(.caption)
+            .font(.body)
             .foregroundColor(isDragging ? .accentColor : .subtitleColor)
             .frame(maxWidth: .infinity)
             .padding(8)
@@ -346,21 +348,20 @@ struct NewTaskView: View {
           path.move(to: start)
           path.addLine(to: end)
         }
-        .stroke(Color.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+        .stroke(Color.white, style: StrokeStyle(lineWidth: 5, lineCap: .round))
         .shadow(color: .white.opacity(0.7), radius: 8)
         // Knob at pointer
         Circle()
           .fill(Color.white)
-          .frame(width: 16, height: 16)
+          .frame(width: 10, height: 10)
           .shadow(color: .white.opacity(0.8), radius: 12)
           .position(end)
         // Optional: subtle glow at anchor
         Circle()
           .fill(Color.white.opacity(0.5))
-          .frame(width: 9, height: 9)
+          .frame(width: 5, height: 5)
           .position(start)
       }
-      .zIndex(9999)
 
     }
   }
@@ -414,9 +415,9 @@ struct TaskItemView: View {
         }
         // button to del task
         Button {
-            taskManager.deleteTasks(for: task.id)
+          taskManager.deleteTasks(for: task.id)
         } label: {
-          Image(systemName: "trash.fill")
+          Image(systemName: "xmark.square.fill")
         }
         .buttonStyle(.plain)
 
