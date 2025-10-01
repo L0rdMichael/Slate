@@ -1,0 +1,23 @@
+{
+  "configurations" : [
+    {
+      "id" : "6D07A8A0-65DB-468A-A513-CDCBF4CB89A8",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Slate.xcodeproj",
+      "identifier" : "047AC8E42E81217B00248493",
+      "name" : "Slate"
+    }
+  },
+  "testTargets" : [
+
+  ],
+  "version" : 1
+}
