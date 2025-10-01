@@ -22,6 +22,13 @@
 ---
 
 ## 🚀 Installation
-```bash
-git clone https://github.com/L0rdMichael/slate.git
-cd slate
+
+### macOS
+
+To install **Slate**, simply download the latest version from our GitHub Releases page and follow these steps:
+
+1.  Navigate to the [**Releases**](https://github.com/L0rdMichael/Slate/releases) page.
+2.  Find the latest release and download the **`slate.v0.zip`** file from the assets.
+3.  Unarchive the downloaded `.zip` file.
+4.  Drag and drop the **`Slate.app`** into your Applications folder.
+5.  Launch the application and start timing your tasks!
